@@ -226,28 +226,164 @@
 @endpush
 
 @section('content')
-    <div class="container">
-        <table>
-            <tr>
-                <th>id</th>
-                <th>name</th>
-                <th>email</th>
-                <th>reputation</th>
-                <th>status</th>
-                <th>Action</th>
-            </tr>
-            @foreach($allUsers as $user)
-                <tr>
-                    <td>{{$user->id}}</td>
-                    <td>{{$user->name}}</td>
-                    <td>{{$user->email}}</td>
-                    <td>{{$user->reputation}}</td>
-                    <td>{{$user->status}}</td>
-                    <td>
-                        <a href="">Ban</a>
-                    </td>
-                </tr>
-            @endforeach
-        </table>
+    <div class="stats-grid">
+
+        {{-- TOTAL USERS --}}
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#FFF0DD; color:#E2A16F;">
+                👥
+            </div>
+            <div>
+                <div class="stat-value">
+                    {{ $totalUsers }}
+                </div>
+                <div class="stat-label">
+                    Utilisateurs
+                </div>
+                <div class="stat-sub">
+                    Total inscrits
+                </div>
+            </div>
+        </div>
+
+        {{-- BANNED USERS --}}
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#fef2f2; color:#dc2626;">
+                🚫
+            </div>
+            <div>
+                <div class="stat-value">
+                    {{ $bannedUsers }}
+                </div>
+                <div class="stat-label">
+                    Utilisateurs bannis
+                </div>
+                <div class="stat-sub">
+                    Comptes désactivés
+                </div>
+            </div>
+        </div>
+
+        {{-- ACTIVE COLOCATIONS --}}
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#eff6ff; color:#86B0BD;">
+                🏠
+            </div>
+            <div>
+                <div class="stat-value">
+                    {{ $activeColocations }}
+                </div>
+                <div class="stat-label">
+                    Colocations actives
+                </div>
+                <div class="stat-sub">
+                    Actuellement en cours
+                </div>
+            </div>
+        </div>
+
+        {{-- TOTAL EXPENSES --}}
+        <div class="stat-card">
+            <div class="stat-icon" style="background:#f0fdf4; color:#16a34a;">
+                💰
+            </div>
+            <div>
+                <div class="stat-value">
+                    {{ number_format($totalExpensesAmount, 2) }}
+                </div>
+                <div class="stat-label">
+                    Total des dépenses
+                </div>
+                <div class="stat-sub">
+                    Montant global
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="admin-card">
+        <div class="admin-card-header">
+            <div class="section-title">Utilisateurs</div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Utilisateur</th>
+                        <th>Réputation</th>
+                        <th>Statut</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach($allUsers as $user)
+                        <tr>
+
+                            <td>#{{ $user->id }}</td>
+
+                            <td>
+                                <div class="user-cell">
+                                    <div>
+                                        <div class="user-cell-name">
+                                            {{ $user->name }}
+                                        </div>
+                                        <div class="user-cell-email">
+                                            {{ $user->email }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div style="display:flex; align-items:center; gap:0.6rem;">
+                                    <span style="font-weight:600;">
+                                        {{ $user->reputation }}
+                                    </span>
+                                </div>
+                            </td>
+
+                            <td>
+                                @if($user->is_banned)
+                                    <span class="badge badge-danger">
+                                        Banni
+                                    </span>
+                                @else
+                                    <span class="badge badge-success">
+                                        Actif
+                                    </span>
+                                @endif
+                            </td>
+
+                            <td>
+                                @if(!$user->is_banned)
+                                    <a href="{{ route('admin.users.ban', $user) }}" style="background:#E2A16F;
+                                                                    color:white;
+                                                                    padding:6px 14px;
+                                                                    border-radius:8px;
+                                                                    font-size:0.8rem;
+                                                                    font-weight:600;
+                                                                    border:none;
+                                                                    cursor:pointer;">Ban</a>
+                                @else
+                                    <a href="{{ route('admin.users.unban', $user) }}" style="background:#86B0BD;
+                                                                    color:white;
+                                                                    padding:6px 14px;
+                                                                    border-radius:8px;
+                                                                    font-size:0.8rem;
+                                                                    font-weight:600;
+                                                                    border:none;
+                                                                    cursor:pointer;">Unban</a>
+                                @endif
+                            </td>
+
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 @endsection

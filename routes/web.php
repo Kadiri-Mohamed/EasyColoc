@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -12,4 +13,9 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-require __DIR__.'/auth.php';
+// ─ Routes Admin ─
+Route::middleware(['auth', 'admin'])
+    ->get('/dashboard-admin', [AdminDashboardController::class, 'index'])
+    ->name('admin.dashboard');
+
+require __DIR__ . '/auth.php';

@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+            $table->decimal('amount', 10, 2);
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('expense_id')->constrained()->onDelete('cascade');
+            $table->boolean('is_paid')->default(false);
+            $table->timestamp('paid_at')->nullable();
             $table->timestamps();
+            
+            $table->unique(['user_id', 'expense_id']);
         });
     }
 

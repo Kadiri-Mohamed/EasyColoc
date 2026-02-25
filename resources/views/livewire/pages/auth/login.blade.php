@@ -5,8 +5,7 @@ use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.guest')] class extends Component
-{
+new #[Layout('layouts.guest')] class extends Component {
     public LoginForm $form;
 
     /**
@@ -25,47 +24,49 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <!-- Session Status -->
+    {{-- Session Status --}}
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <form wire:submit="login">
-        <!-- Email Address -->
+        {{-- Email Address --}}
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="form.email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
+            <label for="email">Adresse email</label>
+            <input wire:model="form.email" id="email" type="email" name="email" required autofocus
+                autocomplete="username" placeholder="exemple@email.com">
+            <x-input-error :messages="$errors->get('form.email')" class="auth-error" />
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input wire:model="form.password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
+        {{-- Password --}}
+        <div style="margin-top: 1.1rem;">
+            <label for="password">Mot de passe</label>
+            <input wire:model="form.password" id="password" type="password" name="password" required
+                autocomplete="current-password" placeholder="••••••••">
+            <x-input-error :messages="$errors->get('form.password')" class="auth-error" />
         </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember" class="inline-flex items-center">
-                <input wire:model="form.remember" id="remember" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+        {{-- Remember Me + Forgot Password --}}
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:1rem;">
+            <label
+                style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; font-weight:400; color:#6b7280;">
+                <input wire:model="form.remember" id="remember" type="checkbox" name="remember">
+                <span style="font-size:0.88rem;">Se souvenir de moi</span>
             </label>
-        </div>
 
-        <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}" wire:navigate>
-                    {{ __('Forgot your password?') }}
+                <a href="{{ route('password.request') }}" wire:navigate>
+                    Mot de passe oublié ?
                 </a>
             @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
         </div>
+
+        {{-- Submit --}}
+        <button type="submit" class="btn-primary">
+            Se connecter
+        </button>
     </form>
+
+    <div class="auth-footer-link">
+        Pas encore de compte ?
+        <a href="{{ route('register') }}" wire:navigate>Créer un compte</a>
+    </div>
 </div>

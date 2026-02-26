@@ -23,6 +23,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('colocation', ColocationController::class)->except(['index']);
     Route::get('/colocations', [ColocationController::class, 'index'])->name('colocation.index');
+
+    Route::patch('/colocation/{colocation}/cancel' , [ColocationController::class, 'cancelColocation'])->name('colocation.cancel');
 });
 
 

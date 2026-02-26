@@ -49,25 +49,23 @@ class ColocationController extends Controller
             return redirect()->route('dashboard')->with('error', 'Vous avez deja une colocation active.');
         }
 
-        DB::beginTransaction();
-
-        try {
+        DB::transaction(function () use ($request) {
             $colocation = Colocation::create($request->validated());
 
-            // Membership::create([
-            //     'user_id' => Auth::id(),
-            //     'colocation_id' => $colocation->id,
-            //     'membership_role' => 'owner',
-            // ]);
+            Membership::create([
+                'user_id' => Auth::id(),
+                'colocation_id' => $colocation->id,
+                'membership_role' => 'owner',
+            ]);
 
             session()->flash('success', 'Colocation creee avec succès !');
             session()->flash('colocation_id', $colocation->id);
-
-            return redirect()->route('colocation.index');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->route('colocation.create')->with('error', 'Une erreur est survenue lors de la creation de la colocation. Veuillez reessayer.');
-        }
+        });
+        return redirect()->route('colocation.index');
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return redirect()->route('colocation.create')->with('error', 'Une erreur est survenue lors de la creation de la colocation. Veuillez reessayer.');
+        // }
     }
 
     public function activeColocation(Colocation $colocation)
@@ -77,7 +75,26 @@ class ColocationController extends Controller
 
     public function cancelColocation(Colocation $colocation)
     {
+        $user = Auth::user();
+        $membership = $colocation->memberships()
+            ->where('user_id', $user->id)
+            ->first();
 
+        if (!$membership || $membership->membership_role !== 'owner') {
+            return redirect()->route('dashboard')
+                ->with('error', 'Seul le propriétaire peut annuler la colocation.');
+        }
+
+        DB::transaction(function () use ($colocation) {
+            $colocation->update(['status' => 'cancelled']);
+
+            $colocation->memberships()
+                ->whereNull('left_at')
+                ->update(['left_at' => now()]);
+        });
+
+        return redirect()->route('dashboard')
+            ->with('success', 'La colocation a été annulée.');
     }
 
     public function show(Colocation $colocation)
@@ -89,7 +106,7 @@ class ColocationController extends Controller
             return redirect()->route('dashboard')->with('error', 'Vous n etes pas membre de cette colocation.');
         }
 
-        $colocation->load(['memberships','expenses']);
+        $colocation->load(['memberships', 'expenses']);
 
         $totalExpenses = $colocation->expenses()->sum('amount');
         $memberCount = $colocation->memberships()->whereNull('left_at')->count();

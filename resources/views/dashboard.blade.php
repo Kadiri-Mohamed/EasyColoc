@@ -759,11 +759,9 @@
                     <div class="stat-card">
                         <div class="stat-icon" style="background:#FFF0DD; color:#E2A16F;">⭐</div>
                         <div style="flex:1; min-width:0;">
-                            <div class="stat-value">{{ $reputationPercent }}</div>
+                            <div class="stat-value">{{ $user->reputation }}</div>
                             <div class="stat-label">Reputation</div>
-                            <div class="reputation-bar-wrap">
-                                <div class="reputation-bar-fill" style="width: {{ $reputationPercent }}%"></div>
-                            </div>
+                            <div class="stat-sub">Total de vos paiements</div>
                         </div>
                     </div>
 
@@ -798,18 +796,6 @@
                             </div>
                         </div>
                     </div>
-
-                    {{-- Depenses colocation --}}
-                    @if($activeColocation)
-                        <div class="stat-card">
-                            <div class="stat-icon" style="background:#fdf4ff; color:#a855f7;">📊</div>
-                            <div>
-                                <div class="stat-value">{{ number_format($totalColocationExpenses, 2) }}</div>
-                                <div class="stat-label">Depenses colocation (MAD)</div>
-                                <div class="stat-sub">Total de la colocation</div>
-                            </div>
-                        </div>
-                    @endif
 
                 </div>
 

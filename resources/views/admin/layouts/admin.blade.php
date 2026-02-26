@@ -280,7 +280,7 @@
                             </div>
                         </div>
                     </div>
-                    <form method="POST" action="" style="margin:0;">
+                    <form method="POST" action="{{ route('logout') }}" style="margin:0;">
                         @csrf
                         <button type="submit" style="
                         background: #fef2f2;

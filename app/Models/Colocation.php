@@ -18,9 +18,9 @@ class Colocation extends Model
 
     //  RELATIONS
 
-    public function category(): BelongsTo
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->hasMany(Category::class);
     }
 
     public function members(): BelongsToMany
@@ -41,8 +41,8 @@ class Colocation extends Model
         return $this->hasMany(Invitation::class);
     }
 
-    public function expenses(): HasMany
+    public function expenses()
     {
-        return $this->hasMany(Expense::class);
+        return $this->hasManyThrough(Expense::class , Category::class);
     }
 }

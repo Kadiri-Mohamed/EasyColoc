@@ -17,8 +17,8 @@ class Category extends Model
         return $this->hasMany(Expense::class);
     }
     
-    public function colocations(): HasMany
+    public function colocation()
     {
-        return $this->hasMany(Colocation::class);
+        return $this->belongsTo(Colocation::class);
     }
 }

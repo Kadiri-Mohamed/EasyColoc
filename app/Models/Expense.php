@@ -21,10 +21,6 @@ class Expense extends Model
 
     //  RELATIONS
 
-    public function colocation(): BelongsTo
-    {
-        return $this->belongsTo(Colocation::class);
-    }
 
     public function category(): BelongsTo
     {

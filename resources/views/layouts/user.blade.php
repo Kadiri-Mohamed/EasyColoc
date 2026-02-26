@@ -517,7 +517,7 @@
                             <line x1="12" y1="5" x2="12" y2="19" />
                             <line x1="5" y1="12" x2="19" y2="12" />
                         </svg>
-                        Créer une colocation
+                        Creer une colocation
                     </a>
                 @else
                     <p class="sidebar-section-title">Ma Colocation</p>
@@ -529,7 +529,8 @@
                         {{ $activeColocation->name }}
                     </a>
                     
-                    <a href="{{ route('colocation.index') }}" class="sidebar-link {{ request()->routeIs('colocation.index') ? 'active' : '' }}">
+                @endif
+                <a href="{{ route('colocation.index') }}" class="sidebar-link {{ request()->routeIs('colocation.index') ? 'active' : '' }}">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="2" y="2" width="20" height="20" rx="2" />
                             <line x1="8" y1="2" x2="8" y2="22" />
@@ -537,7 +538,6 @@
                         </svg>
                         Toutes mes colocations
                     </a>
-                @endif
 
                 @if(auth()->user()->is_admin)
                     <p class="sidebar-section-title">Administration</p>
@@ -576,7 +576,7 @@
                     </span>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="btn-logout">Déconnexion</button>
+                        <button type="submit" class="btn-logout">Logout</button>
                     </form>
                 </div>
             </div>

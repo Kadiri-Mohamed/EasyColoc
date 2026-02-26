@@ -28,7 +28,7 @@
                     </svg>
                     Inviter
                 </a>
-                <form action="" method="POST" class="inline">
+                <form action="{{ route('colocation.cancel', $colocation) }}" method="POST" class="inline">
                     @csrf
                     @method('PATCH')
                     <button type="submit" class="btn-danger" 

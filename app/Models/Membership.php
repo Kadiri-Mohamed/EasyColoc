@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class Membership extends Pivot
 {
+    protected $table = 'memberships';
     protected $fillable = [
         'user_id',
         'colocation_id',

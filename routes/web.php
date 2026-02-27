@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\UserDashboardController;
@@ -30,7 +31,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/colocation/{colocation}/leave' , [MembershipController::class, 'leaveColocation'])->name('colocation.leave');
     Route::delete('/colocation/{colocation}/{membership}/kick' , [MembershipController::class, 'kickMember'])->name('colocation.kick');
 
+     Route::get('/colocation/{colocation}/expenses/create', [ExpenseController::class, 'create'])->name('expenses.create');
+    Route::post('/colocation/{colocation}/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
+    Route::get('/colocation/{colocation}/expenses/{expense}', [ExpenseController::class, 'show'])->name('expenses.show');
+    Route::get('/colocation/{colocation}/expenses/{expense}/edit', [ExpenseController::class, 'edit'])->name('expenses.edit');
+    Route::put('/colocation/{colocation}/expenses/{expense}', [ExpenseController::class, 'update'])->name('expenses.update');
+    Route::delete('/colocation/{colocation}/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('expenses.destroy');
 
+    Route::post('/colocation/{colocation}/payments/{payment}/mark-paid', [ExpenseController::class, 'markPayment'])->name('payments.mark-paid');
+
+    Route::get('/colocation/{colocation}/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/colocation/{colocation}/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/colocation/{colocation}/categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('/colocation/{colocation}/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+    Route::put('/colocation/{colocation}/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/colocation/{colocation}/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
 

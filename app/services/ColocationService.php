@@ -45,39 +45,6 @@ class ColocationService
         });
     }
 
-    public function calculateBalances(Colocation $colocation): array
-    {
-        $members = $colocation->memberships()->whereNull('left_at')->with('user')->get();
-
-        $expenses = $colocation->expenses()->with('payments')->get();
-
-        $balances = [];
-
-        foreach ($members as $member) {
-
-            $paid = $expenses->where('payer_id', $member->user_id)->sum('amount');
-
-            $owed = 0;
-
-            foreach ($expenses as $expense) {
-                $payment = $expense->payments->where('user_id', $member->user_id)->first();
-
-                if ($payment && !$payment->is_paid) {
-                    $owed += $payment->amount;
-                }
-            }
-
-            $balances[$member->user_id] = [
-                'user' => $member->user,
-                'paid' => $paid,
-                'owed' => $owed,
-                'balance' => $paid - $owed,
-            ];
-        }
-
-        return $balances;
-    }
-
     private function hasActiveColocation(User $user): bool
     {
         return $user->colocations()->wherePivotNull('left_at')->exists();

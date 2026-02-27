@@ -55,15 +55,12 @@ class ColocationController extends Controller
 
     public function show(Colocation $colocation, ColocationService $service)
     {
-        $balances = $service->calculateBalances($colocation);
-
         $totalExpenses = $colocation->expenses()->sum('amount');
 
         $memberCount = $colocation->memberships()->whereNull('left_at')->count();
 
         return view('colocation.show', compact(
             'colocation',
-            'balances',
             'totalExpenses',
             'memberCount'
         ));

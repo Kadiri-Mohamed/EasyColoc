@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\Colocation;
+use App\Models\Membership;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class MembershipService
@@ -58,5 +60,23 @@ class MembershipService
             'total_owed' => $totalOwed,
             'balance' => $totalPaid - $totalOwed,
         ];
+    }
+
+    public function kick(Colocation $colocation, Membership $membership): void
+    {
+        $owner = $colocation->memberships()->where('user_id', '=',Auth::id())->where('membership_role' , '=','owner')->first();
+
+        if (!$owner) {
+            throw new \Exception('no_owner');
+        }
+
+        if ($owner->id === $membership->id) {
+            throw new \Exception('owner_cannot_be_kicked');
+        }
+
+        $membership->update([
+            'left_at' => now(),
+        ]);        
+        
     }
 }

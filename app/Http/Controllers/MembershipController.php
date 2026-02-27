@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Colocation;
+use App\Models\Membership;
 use App\Services\MembershipService;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,6 +20,15 @@ class MembershipController extends Controller
                 'owner_cannot_leave' => redirect()->route('colocation.show', $colocation)->with('error', 'Le proprietaire doit annuler la colocation.'),
                 default => redirect()->route('dashboard')->with('error', 'Une erreur est survenue.'),
             };
+        }
+    }
+
+    public function kickMember(Colocation $colocation, MembershipService $service, Membership $membership){
+        try {
+            $service->kick($colocation, $membership);
+            return redirect()->route('colocation.show', $colocation)->with('success', 'Membre expulse.');
+        } catch (\Exception $e) {
+            return redirect()->route('colocation.show', $colocation)->with('error', 'Une erreur est survenue.');
         }
     }
 }

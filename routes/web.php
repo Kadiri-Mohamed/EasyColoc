@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\ColocationController;
@@ -46,7 +47,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/colocation/{colocation}/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
     Route::put('/colocation/{colocation}/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/colocation/{colocation}/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+
+    Route::post('/colocation/{colocation}/invitations', [InvitationController::class, 'store'])->name('invitations.store');
 });
 
+Route::get('/invitations/accept/{token}', [InvitationController::class, 'accept'])->name('invitations.accept');
+Route::get('/invitations/reject/{token}', [InvitationController::class, 'reject'])->name('invitations.reject');
 
 require __DIR__ . '/auth.php';

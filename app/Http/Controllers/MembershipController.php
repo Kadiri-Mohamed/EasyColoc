@@ -2,63 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Colocation;
+use App\Services\MembershipService;
+use Illuminate\Support\Facades\Auth;
 
 class MembershipController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function leaveColocation(Colocation $colocation, MembershipService $service)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        try {
+            $service->leave($colocation, Auth::user());
+            return redirect()->route('dashboard')->with('success', 'Vous avez quitte la colocation.');
+        } catch (\Exception $e) {
+            return match ($e->getMessage()) {
+                'not_member' => redirect()->route('dashboard')->with('error', 'Vous n etes pas membre.'),
+                'owner_cannot_leave' => redirect()->route('colocation.show', $colocation)->with('error', 'Le proprietaire doit annuler la colocation.'),
+                default => redirect()->route('dashboard')->with('error', 'Une erreur est survenue.'),
+            };
+        }
     }
 }

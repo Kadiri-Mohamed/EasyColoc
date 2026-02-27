@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\ColocationController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/colocations', [ColocationController::class, 'index'])->name('colocation.index');
 
     Route::patch('/colocation/{colocation}/cancel' , [ColocationController::class, 'cancelColocation'])->name('colocation.cancel');
+    Route::delete('/colocation/{colocation}/leave' , [MembershipController::class, 'leaveColocation'])->name('colocation.leave');
+
 });
 
 

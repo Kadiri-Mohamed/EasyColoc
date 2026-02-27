@@ -37,14 +37,23 @@ class MembershipService
 
     private function calculateDebts(Colocation $colocation, User $user): array
     {
+        $expenses = $colocation->expenses()->with([
+            'payments' => function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            }
+        ])->get();
+
+        $totalOwed = 0;
+
         $totalPaid = $colocation->expenses()->where('payer_id', $user->id)->sum('amount');
 
-        $totalOwed = DB::table('payments')->join('expenses', 'payments.expense_id', '=', 'expenses.id')
-            ->where('expenses.colocation_id', $colocation->id)
-            ->where('payments.user_id', $user->id)
-            ->where('payments.is_paid', false)
-            ->sum('payments.amount');
-
+        foreach ($expenses as $expense) {
+            foreach ($expense->payments as $payment) {
+                if (!$payment->is_paid) {
+                    $totalOwed += $payment->amount;
+                }
+            }
+        }
 
         return [
             'total_paid' => $totalPaid,

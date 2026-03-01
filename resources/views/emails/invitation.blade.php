@@ -1,6 +1,7 @@
 {{-- resources/views/emails/invitation.blade.php --}}
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -273,6 +274,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="email-wrapper">
         <div class="email-header">
@@ -294,14 +296,16 @@
                     🏠 {{ $colocation->name }}
                 </div>
                 <p style="color: #4b5563; margin-top: 12px;">
-                    Vous avez ete invite par <strong>{{ $inviter->name }}</strong> a rejoindre cette colocation. EasyColoc vous aidera a gerer facilement les depenses communes et a savoir qui doit quoi a qui.
+                    Vous avez ete invite par <strong>{{ $inviter->name }}</strong> a rejoindre cette colocation.
+                    EasyColoc vous aidera a gerer facilement les depenses communes et a savoir qui doit quoi a qui.
                 </p>
             </div>
 
             <!-- Bouton d'acceptation -->
+
             <div class="button-container">
-                <a href="{{ $acceptUrl }}" class="accept-button">
-                    ✨ Accepter l'invitation
+                <a href="{{ route('invitations.confirm', $invitation->token) }}" class="accept-button">
+                    Voir l'invitation
                 </a>
             </div>
         </div>
@@ -315,4 +319,5 @@
         </div>
     </div>
 </body>
+
 </html>

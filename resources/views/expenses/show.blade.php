@@ -1,4 +1,3 @@
-{{-- resources/views/expenses/show.blade.php --}}
 @extends('layouts.user')
 
 @section('page-title', $expense->title . ' - ' . $colocation->name)

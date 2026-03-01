@@ -1,4 +1,3 @@
-{{-- resources/views/dashboard.blade.php --}}
 @extends('layouts.user')
 
 @section('page-title', 'Tableau de bord')

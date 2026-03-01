@@ -1,4 +1,3 @@
-{{-- resources/views/categories/edit.blade.php --}}
 @extends('layouts.user')
 
 @section('page-title', 'Modifier - ' . $category->name)

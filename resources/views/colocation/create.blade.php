@@ -1,4 +1,3 @@
-{{-- resources/views/colocation/create.blade.php --}}
 @extends('layouts.user')
 
 @section('page-title', 'Créer une colocation')

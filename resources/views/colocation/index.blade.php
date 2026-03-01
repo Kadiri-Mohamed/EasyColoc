@@ -1,4 +1,3 @@
-{{-- resources/views/colocation/index.blade.php --}}
 @extends('layouts.user')
 
 @section('page-title', 'Mes Colocations')

@@ -6,6 +6,7 @@ use App\Http\Requests\ColocationRequest;
 use App\Models\Colocation;
 use App\Services\ColocationService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class ColocationController extends Controller
 {
@@ -53,16 +54,30 @@ class ColocationController extends Controller
         }
     }
 
-    public function show(Colocation $colocation, ColocationService $service)
-    {
-        $totalExpenses = $colocation->expenses()->sum('amount');
+    public function show(
+        Request $request,
+        Colocation $colocation
+    ) {
+        $month = $request->get('month');
+
+        $expensesQuery = $colocation->expenses()->with(['payer', 'category'])->orderByDesc('expense_date');
+
+        if ($month) {
+            $expensesQuery->whereMonth('expense_date', $month);
+        }
+
+        $expenses = $expensesQuery->get();
+
+        $totalExpenses = $expenses->sum('amount');
 
         $memberCount = $colocation->memberships()->whereNull('left_at')->count();
 
         return view('colocation.show', compact(
             'colocation',
+            'expenses',
             'totalExpenses',
-            'memberCount'
+            'memberCount',
+            'month'
         ));
     }
 }

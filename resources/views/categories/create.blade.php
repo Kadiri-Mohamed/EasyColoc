@@ -1,4 +1,3 @@
-{{-- resources/views/categories/create.blade.php --}}
 @extends('layouts.user')
 
 @section('page-title', 'Nouvelle categorie - ' . $colocation->name)

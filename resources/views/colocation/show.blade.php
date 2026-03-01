@@ -1,4 +1,3 @@
-{{-- resources/views/colocation/show.blade.php --}}
 @extends('layouts.user')
 
 @section('page-title', $colocation->name)
@@ -210,12 +209,25 @@
                 <span>💳</span>
                 Depenses recentes
             </div>
+            <form method="GET" class="mb-4 flex gap-3 items-center">
+    <label class="text-sm">Filtrer par mois :</label>
+
+    <select name="month" onchange="this.form.submit()" class="border rounded px-3 py-1">
+        <option value="">Tous les mois</option>
+
+        @for($m = 1; $m <= 12; $m++)
+            <option value="{{ $m }}" {{ request('month') == $m ? 'selected' : '' }}>
+                {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
+            </option>
+        @endfor
+    </select>
+</form>
             <a href="{{ route('expenses.create', $colocation) }}" class="btn-primary text-sm py-1.5 px-3">
                 + Nouvelle depense
             </a>
         </div>
         <div class="card-body">
-            @if($colocation->expenses->count() > 0)
+            @if($expenses->count() > 0)
                 <div class="table-container">
                     <table class="table">
                         <thead>
@@ -228,7 +240,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($colocation->expenses as $expense)
+                            @foreach($expenses as $expense)
                                 <tr>
                                     <td>{{ $expense->expense_date }}</td>
                                     <td class="font-medium">

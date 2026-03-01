@@ -74,9 +74,44 @@ class MembershipService
             throw new \Exception('owner_cannot_be_kicked');
         }
 
-        $membership->update([
-            'left_at' => now(),
-        ]);        
-        
+          DB::transaction(function () use ($colocation, $membership, $owner) {
+            $user = $membership->user;
+            $debts = $this->calculateDebts($colocation, $user);
+
+            if ($debts['total_owed'] > 0) {
+                $this->transferDebtsToOwner($colocation, $user, $owner->user);
+
+                $user->reputation -= 1;
+                $user->save();
+
+            } else {
+
+                $membership->update([
+                    'left_at' => now(),
+                ]);
+            }
+        });
+
     }
+
+    private function transferDebtsToOwner(Colocation $colocation, User $user, User $owner): void
+    {
+        $expenses = $colocation->expenses()->with([
+            'payments' => function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            }
+        ])->get();
+
+        foreach ($expenses as $expense) {
+            foreach ($expense->payments as $payment) {
+                if (!$payment->is_paid) {
+                    $payment->update([
+                        'user_id' => $owner->id,
+                        'is_paid' => true,
+                    ]);
+                }
+            }
+        }
+    }
+    
 }

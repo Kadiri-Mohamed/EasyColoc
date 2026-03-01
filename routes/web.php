@@ -50,6 +50,7 @@ Route::middleware(['auth', 'verified' , 'check.banned'])->group(function () {
 
     Route::post('/colocation/{colocation}/invitations', [InvitationController::class, 'store'])->name('invitations.store');
 });
+Route::get('/invitations/confirm/{token}', [InvitationController::class, 'confirm'])->name('invitations.confirm');
 
 Route::get('/invitations/accept/{token}', [InvitationController::class, 'accept'])->name('invitations.accept');
 Route::get('/invitations/reject/{token}', [InvitationController::class, 'reject'])->name('invitations.reject');

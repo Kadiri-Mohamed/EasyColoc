@@ -107,7 +107,7 @@
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid md:grid-cols-3 gap-6 mb-8">
+    <div class="flex justify-between gap-6 mb-8">
         <div class="card">
             <div class="card-body flex items-center gap-4">
                 <div class="stat-icon" style="background:#eff6ff; color:#3b82f6;">👥</div>
@@ -179,6 +179,9 @@
                                         </span>
                                         <span class="badge badge-success">Membre depuis {{ $membership->joined_at }}</span>
                                     </div>
+                                </div>
+                                <div class="">
+                                    <p class="font-medium">{{ $membership->user->reputation }}</p>
                                 </div>
                             </div>
 
